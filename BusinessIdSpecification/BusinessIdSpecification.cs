@@ -32,7 +32,7 @@ namespace BusinessIdSpecification
                 if (IsCorrect(businessId))
                 {
                     //calls method, which checks if verificationnumber on the businessId is correct
-                    if (calculateandCheckVerificationNumber(businessId))
+                    if (CalculateandCheckVerificationNumber(businessId))
                     {
                         ReasonsForDissatisfaction = Enumerable.Empty<string>();
                         return true;
@@ -121,7 +121,7 @@ namespace BusinessIdSpecification
         }
         //only called when businessId has been verified to be in form: 1234567-8
         //uses function found here: http://tarkistusmerkit.teppovuori.fi/tarkmerk.htm#y-tunnus2
-        public bool calculateandCheckVerificationNumber(string businessId)
+        private bool CalculateandCheckVerificationNumber(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
             
