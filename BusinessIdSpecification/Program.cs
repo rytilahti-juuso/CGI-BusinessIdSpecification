@@ -13,7 +13,7 @@ namespace BusinessIdSpecification
         static void Main(string[] args)
         {
             BusinessIdSpecification business = new BusinessIdSpecification();
-            business.IsSatisfiedBy("1234567-1");
+            business.IsSatisfiedBy("0357502-9");
             foreach (var item in business.ReasonsForDissatisfaction)
             {
                 Console.WriteLine(item);

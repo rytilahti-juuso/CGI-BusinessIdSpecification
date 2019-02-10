@@ -24,17 +24,30 @@ namespace BusinessIdSpecification
 
         public bool IsSatisfiedBy(string businessId)
         {
+            //List of dissatisfactions in businessId
+            List<string> reasonsForDissatisfactionList = new List<string>();
             if (businessId.Length == 9)
-            {
+            {   
+                //calls method, which checks if businessId is in the correct form
                 if (IsCorrect(businessId))
                 {
-                    ReasonsForDissatisfaction = Enumerable.Empty<string>();
-                    return true;
+                    //calls method, which checks if verificationnumber on the businessId is correct
+                    if (calculateandCheckVerificationNumber(businessId))
+                    {
+                        ReasonsForDissatisfaction = Enumerable.Empty<string>();
+                        return true;
+                    }
+                    else
+                    {
+                        reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
+                        ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
+                        return false;
+                    }
+                    
                 }
             }
 
-            //List of dissatisfactions in businessId
-            List<string> reasonsForDissatisfactionList = new List<string>();
+            
             if (businessId.Length > 9)
             {
                 reasonsForDissatisfactionList.Add("BusinessId is too long");
@@ -104,6 +117,38 @@ namespace BusinessIdSpecification
                 return false;
             }
 
+
+        }
+        //only called when businessId has been verified to be in form: 1234567-8
+        //uses function found here: http://tarkistusmerkit.teppovuori.fi/tarkmerk.htm#y-tunnus2
+        public bool calculateandCheckVerificationNumber(string businessId)
+        {
+            string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
+            
+            int firstNumber = (int)char.GetNumericValue(businessId[0])*7;
+            int secondNumber = (int)Char.GetNumericValue(businessId[1])*9;
+            int thirdNumber = (int)Char.GetNumericValue(businessId[2])*10;
+            int fourthNumber = (int)Char.GetNumericValue(businessId[3])*5;
+            int fifthNumber = (int)Char.GetNumericValue(businessId[4])*8;
+            int sixthNumber = (int)Char.GetNumericValue(businessId[5])*4;
+            int seventhNumber = (int)Char.GetNumericValue(businessId[6])*2;
+            int total = firstNumber + secondNumber + thirdNumber + fourthNumber + fifthNumber + sixthNumber + seventhNumber;
+            Console.WriteLine("Total is: " +total);
+            //reduces the modulo from 11 and gets the calculated verification number 
+            int calculatedVerificationNumber = 11 - (total % 11);
+            Console.WriteLine("Calculated verification number is: " + calculatedVerificationNumber);
+            
+            int verificationNumberInBusinessId = (int)char.GetNumericValue(businessId[8]);
+            Console.WriteLine("VerificationNumber in businessId is: " + verificationNumberInBusinessId);
+            //verification number cant be number one
+            if (calculatedVerificationNumber == verificationNumberInBusinessId && verificationNumberInBusinessId != 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
         }
 
