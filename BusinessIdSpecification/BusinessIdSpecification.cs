@@ -74,15 +74,15 @@ namespace BusinessIdSpecification
             // Starts checking left and right side of the hyphon. Also avoids neg. numbers
             else if (businessId.IndexOf('-') != 0)
             {
+                //Executes if left side of hyphon is not in correct form
                 if (!(LeftSideOfHyphonIsInCorrectForm(businessId)))
                 {
                     reasonsForDissatisfactionList.Add("There should be seven numbers on the left side of the hyphon and no other characters");
                 }
-                //Checks right side of the hyphon, if there are characters then executes
+                //Executes if right side of hyphon is not in correct form
                 if (!(RightSideOfHyphonIsInCorrectForm(businessId)))
                 {
                     reasonsForDissatisfactionList.Add("There should be only one number on the rigth side of the hyphon and no other characters");
-                    
                 }
             }
 
