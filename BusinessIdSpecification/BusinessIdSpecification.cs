@@ -27,7 +27,7 @@ namespace BusinessIdSpecification
             //List of dissatisfactions in businessId
             List<string> reasonsForDissatisfactionList = new List<string>();
             //checks if businessId is in correct form and if the verification number is right
-            if (IsCorrect(businessId))
+            if (BusinessIdIsInCorrectForm(businessId))
             {
                 if (CalculateandCheckVerificationNumber(businessId))
                 {
@@ -84,7 +84,7 @@ namespace BusinessIdSpecification
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
-        private bool IsCorrect(string businessId)
+        private bool BusinessIdIsInCorrectForm(string businessId)
         {
             if (businessId.Length == 9)
             {
