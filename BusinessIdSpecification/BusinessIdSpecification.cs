@@ -74,29 +74,51 @@ namespace BusinessIdSpecification
             // Starts checking left and right side of the hyphon. Also avoids neg. numbers
             else if (businessId.IndexOf('-') != 0)
             {
-                string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
-
-                //Check if left side of hyphon can be converted to int and is left side of hyphon correct length
-                if (!(int.TryParse(firstPart, out int a)) || firstPart.Length != 7)
+                if (!(LeftSideOfHyphonIsInCorrectForm(businessId)))
                 {
                     reasonsForDissatisfactionList.Add("There should be seven numbers on the left side of the hyphon and no other characters");
                 }
                 //Checks right side of the hyphon, if there are characters then executes
-                if (businessId.IndexOf('-') != businessId.Length - 1)
+                if (!(RightSideOfHyphonIsInCorrectForm(businessId)))
                 {
-                    string secondPart = businessId.Substring((businessId.IndexOf('-') + 1));
-                    Console.WriteLine("Right side of the hyphon is: " + secondPart);
-                    //Checks if there are only ints on the right side of hyphon and that there is only one chareacter on the right side of the hyphon
-                    if (!(int.TryParse(secondPart, out int b)) || secondPart.Length != 1)
-                    {
-                        reasonsForDissatisfactionList.Add("There should be only one number on the rigth side of the hyphon and no other characters");
-                    }
+                    reasonsForDissatisfactionList.Add("There should be only one number on the rigth side of the hyphon and no other characters");
+                    
                 }
             }
 
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
+
+        private bool LeftSideOfHyphonIsInCorrectForm(string businessId)
+        {
+            string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
+
+            //Check if left side of hyphon can be converted to int and is left side of hyphon correct length
+            if (!(int.TryParse(firstPart, out int a)) || firstPart.Length != 7)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool RightSideOfHyphonIsInCorrectForm(string businessId)
+        {
+            //Checks right side of the hyphon, if there are characters then executes
+            if (businessId.IndexOf('-') != businessId.Length - 1)
+            {
+                string secondPart = businessId.Substring((businessId.IndexOf('-') + 1));
+                Console.WriteLine("Right side of the hyphon is: " + secondPart);
+                //Checks if there are only ints on the right side of hyphon and that there is only one chareacter on the right side of the hyphon
+                if (!(int.TryParse(secondPart, out int b)) || secondPart.Length != 1)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         private bool BusinessIdIsInCorrectForm(string businessId)
         {
             if (businessId.Length == 9)
