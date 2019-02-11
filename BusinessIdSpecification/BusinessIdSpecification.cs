@@ -126,12 +126,12 @@ namespace BusinessIdSpecification
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
             
             int firstNumber = (int)char.GetNumericValue(businessId[0])*7;
-            int secondNumber = (int)Char.GetNumericValue(businessId[1])*9;
-            int thirdNumber = (int)Char.GetNumericValue(businessId[2])*10;
-            int fourthNumber = (int)Char.GetNumericValue(businessId[3])*5;
-            int fifthNumber = (int)Char.GetNumericValue(businessId[4])*8;
-            int sixthNumber = (int)Char.GetNumericValue(businessId[5])*4;
-            int seventhNumber = (int)Char.GetNumericValue(businessId[6])*2;
+            int secondNumber = (int)char.GetNumericValue(businessId[1])*9;
+            int thirdNumber = (int)char.GetNumericValue(businessId[2])*10;
+            int fourthNumber = (int)char.GetNumericValue(businessId[3])*5;
+            int fifthNumber = (int)char.GetNumericValue(businessId[4])*8;
+            int sixthNumber = (int)char.GetNumericValue(businessId[5])*4;
+            int seventhNumber = (int)char.GetNumericValue(businessId[6])*2;
             int total = firstNumber + secondNumber + thirdNumber + fourthNumber + fifthNumber + sixthNumber + seventhNumber;
             Console.WriteLine("Total is: " +total);
 
