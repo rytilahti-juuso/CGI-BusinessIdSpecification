@@ -9,10 +9,9 @@ namespace BusinessIdSpecification
 {
     class BusinessIdSpecification : ISpecification<string>
     {
-        private string businessId;
         private IEnumerable<string> reasonsForDissatisfaction;
 
-
+        //getters and setters
         public IEnumerable<string> ReasonsForDissatisfaction
         {
             get => reasonsForDissatisfaction;
