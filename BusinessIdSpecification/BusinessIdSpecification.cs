@@ -19,10 +19,23 @@ namespace BusinessIdSpecification
             set => reasonsForDissatisfaction = value;
         }
 
-
+        public static void ThrowIfNullOrEmpty(string businessId)
+        {
+            if (businessId == null)
+            {
+                throw new ArgumentNullException(businessId);
+            }
+            if (businessId == string.Empty)
+            {
+                throw new ArgumentException("Argument must not be the empty string.",
+                                            businessId);
+            }
+        }
 
         public bool IsSatisfiedBy(string businessId)
         {
+            BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
+
             //List of dissatisfactions in businessId
             List<string> reasonsForDissatisfactionList = new List<string>();
             //checks if businessId is in correct form 
@@ -48,7 +61,7 @@ namespace BusinessIdSpecification
             {
                 reasonsForDissatisfactionList.Add("BusinessId is too short");
             }
-            //if businessId does not contain hyphon
+            //true if businessId does not contain hyphon
             if (!businessId.Contains('-'))
             {
                 reasonsForDissatisfactionList.Add("BusinessId is missing hyphon!");

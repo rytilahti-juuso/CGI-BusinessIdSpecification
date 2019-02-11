@@ -10,10 +10,10 @@ namespace BusinessIdSpecification
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             BusinessIdSpecification business = new BusinessIdSpecification();
-            business.IsSatisfiedBy("0357502-9");
             foreach (var item in business.ReasonsForDissatisfaction)
             {
                 Console.WriteLine(item);
