@@ -108,7 +108,7 @@ namespace BusinessIdSpecification
             if (businessId.IndexOf('-') != businessId.Length - 1)
             {
                 string secondPart = businessId.Substring((businessId.IndexOf('-') + 1));
-                Console.WriteLine("Right side of the hyphon is: " + secondPart);
+                //Console.WriteLine("Right side of the hyphon is: " + secondPart);
                 //Checks if there are only ints on the right side of hyphon and that there is only one chareacter on the right side of the hyphon
                 if (!(int.TryParse(secondPart, out int b)) || secondPart.Length != 1)
                 {
@@ -146,14 +146,14 @@ namespace BusinessIdSpecification
             int sixthNumber = (int)char.GetNumericValue(businessId[5])*4;
             int seventhNumber = (int)char.GetNumericValue(businessId[6])*2;
             int total = firstNumber + secondNumber + thirdNumber + fourthNumber + fifthNumber + sixthNumber + seventhNumber;
-            Console.WriteLine("Total is: " +total);
+            //Console.WriteLine("Total is: " +total);
 
             //reduces the modulo from 11 and gets the calculated verification number 
             int calculatedVerificationNumber = 11 - (total % 11);
-            Console.WriteLine("Calculated verification number is: " + calculatedVerificationNumber);
+            //Console.WriteLine("Calculated verification number is: " + calculatedVerificationNumber);
             
             int verificationNumberInBusinessId = (int)char.GetNumericValue(businessId[8]);
-            Console.WriteLine("VerificationNumber in businessId is: " + verificationNumberInBusinessId);
+            //Console.WriteLine("VerificationNumber in businessId is: " + verificationNumberInBusinessId);
             
             if (calculatedVerificationNumber == verificationNumberInBusinessId)
             {
