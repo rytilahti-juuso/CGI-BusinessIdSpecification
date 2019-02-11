@@ -26,28 +26,20 @@ namespace BusinessIdSpecification
         {
             //List of dissatisfactions in businessId
             List<string> reasonsForDissatisfactionList = new List<string>();
-            if (businessId.Length == 9)
-            {   
-                //calls method, which checks if businessId is in the correct form
-                if (IsCorrect(businessId))
+            //checks if businessId is in correct form and if the verification number is right
+            if (IsCorrect(businessId))
+            {
+                if (CalculateandCheckVerificationNumber(businessId))
                 {
-                    //calls method, which checks if verificationnumber on the businessId is correct
-                    if (CalculateandCheckVerificationNumber(businessId))
-                    {
-                        ReasonsForDissatisfaction = Enumerable.Empty<string>();
-                        return true;
-                    }
-                    else
-                    {
-                        reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
-                        ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
-                        return false;
-                    }
-                    
+                    ReasonsForDissatisfaction = Enumerable.Empty<string>();
+                    return true;
                 }
-            }
-
-            
+                else
+                {
+                    reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
+                    return false;
+                }
+            } 
             if (businessId.Length > 9)
             {
                 reasonsForDissatisfactionList.Add("BusinessId is too long");
@@ -92,32 +84,18 @@ namespace BusinessIdSpecification
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
-        public bool IsCorrect(string businessId)
+        private bool IsCorrect(string businessId)
         {
-            string regexString =
-           @"(^[0-9]{7})+[-]+[0-9]{1}$";
-            RegexStringValidator myRegexValidator =
-             new RegexStringValidator(regexString);
-
-            // Determine if the object to validate can be validated.
-            Console.WriteLine("CanValidate: {0}",
-              myRegexValidator.CanValidate(businessId.GetType()));
-
-            try
+            if (businessId.Length == 9)
             {
-                // Attempt validation.
-                myRegexValidator.Validate(businessId);
-                Console.WriteLine("Validated.");
-                return true;
+                string regexString = @"(^[0-9]{7})+[-]+[0-9]{1}$";
+                //calls method, which checks if verificationnumber on the businessId is correct
+                if (Regex.IsMatch(businessId, regexString))
+                {
+                    return true;
+                }
             }
-            catch (ArgumentException e)
-            {
-                // Validation failed.
-                Console.WriteLine(" BusinessId is not in correct form. It should be ex.1234567-8 , instead it is {0}", businessId);
-                return false;
-            }
-
-
+            return false;
         }
         //only called when businessId has been verified to be in form: 1234567-8
         //uses function found here: http://tarkistusmerkit.teppovuori.fi/tarkmerk.htm#y-tunnus2
