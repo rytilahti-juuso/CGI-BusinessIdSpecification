@@ -134,14 +134,15 @@ namespace BusinessIdSpecification
             int seventhNumber = (int)Char.GetNumericValue(businessId[6])*2;
             int total = firstNumber + secondNumber + thirdNumber + fourthNumber + fifthNumber + sixthNumber + seventhNumber;
             Console.WriteLine("Total is: " +total);
+
             //reduces the modulo from 11 and gets the calculated verification number 
             int calculatedVerificationNumber = 11 - (total % 11);
             Console.WriteLine("Calculated verification number is: " + calculatedVerificationNumber);
             
             int verificationNumberInBusinessId = (int)char.GetNumericValue(businessId[8]);
             Console.WriteLine("VerificationNumber in businessId is: " + verificationNumberInBusinessId);
-            //verification number cant be number one
-            if (calculatedVerificationNumber == verificationNumberInBusinessId && verificationNumberInBusinessId != 1)
+            
+            if (calculatedVerificationNumber == verificationNumberInBusinessId)
             {
                 return true;
             }
