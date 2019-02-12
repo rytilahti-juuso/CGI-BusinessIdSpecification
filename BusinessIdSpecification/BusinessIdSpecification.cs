@@ -52,6 +52,8 @@ namespace BusinessIdSpecification
         //false: sets reasons to dissatisfactions in to reasonstoDissatisfaction
         public bool IsSatisfiedBy(string businessId)
         {
+            ReasonsForDissatisfaction = Enumerable.Empty<string>();
+            ReasonsForDissatisfactionList.Clear();
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
             //checks if businessId is in correct form 
             if (IsBusinessIdFullyCorrect(businessId))
@@ -73,6 +75,7 @@ namespace BusinessIdSpecification
         //false:if only verification number is incorrects, add it to ReasonForDissatisfactionList
         private bool IsBusinessIdFullyCorrect (string businessId)
         {
+
             //checks if businessId is in correct form and Checks if the verification number is right
             if (BusinessIdIsInCorrectForm(businessId) && CalculateandCheckVerificationNumber(businessId))
             {
@@ -100,7 +103,7 @@ namespace BusinessIdSpecification
             }
         }
 
-        //Requires:String as arg, NOTE: The provided string does not require to have hyphon('-')
+        //Requires:String as parameter, NOTE: The provided string does not require to have hyphon('-')
         //If String has hyphon ,c alls methods LeftSideOfHyphonIsInCorrectForm(businessId), RightSideOfHyphonIsInCorrectForm(businessId);
         //sets: if string does not have hyphon, adds to ReasonsForDissatisfactionList note about missing hyphon
         private void RightAndLeftSideOfHyphon(string businessId)
