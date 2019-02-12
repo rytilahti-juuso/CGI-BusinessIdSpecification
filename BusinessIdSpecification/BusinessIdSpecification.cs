@@ -32,6 +32,8 @@ namespace BusinessIdSpecification
             }
         }
 
+        // true: sets reasonsForDissatisFaction as empty
+        //false: sets reasons to dissatisfactions in to reasonsDissatisfaction
         public bool IsSatisfiedBy(string businessId)
         {
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
@@ -89,7 +91,9 @@ namespace BusinessIdSpecification
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
-
+        //requires: String contains a hyphon('-')
+        //true: left side of hyphon is in correct form
+        //false: left side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
         private bool LeftSideOfHyphonIsInCorrectForm(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
@@ -102,6 +106,9 @@ namespace BusinessIdSpecification
             return true;
         }
 
+        //requires: String contains a hyphon('-')
+        //true: right side of hyphon is in correct form
+        //false: right side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
         private bool RightSideOfHyphonIsInCorrectForm(string businessId)
         {
             //Checks right side of the hyphon, if there are characters then executes
@@ -118,7 +125,9 @@ namespace BusinessIdSpecification
             }
             return false;
         }
-
+        //requires: parameter is string
+        //true: Business id is in correct form, NOTE: Does not check that verification number is right
+        //false: returns false
         private bool BusinessIdIsInCorrectForm(string businessId)
         {
             if (businessId.Length == 9)
@@ -132,8 +141,11 @@ namespace BusinessIdSpecification
             }
             return false;
         }
-        //only called when businessId has been verified to be in form: 1234567-8
+        
         //uses function found here: http://tarkistusmerkit.teppovuori.fi/tarkmerk.htm#y-tunnus2
+        //requires: businessId is in correct form (ex. 1234567-8)
+        //true: verification number is right
+        //false: verification number is incorrect
         private bool CalculateandCheckVerificationNumber(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));

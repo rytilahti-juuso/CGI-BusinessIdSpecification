@@ -14,7 +14,7 @@ namespace BusinessIdSpecification
         {
             BusinessIdSpecification business = new BusinessIdSpecification();
             business.IsSatisfiedBy("0357502-9");
-            Console.WriteLine(business.IsSatisfiedBy("035750a2-98"));
+            //Console.WriteLine(business.IsSatisfiedBy("0357502-9"));
             foreach (var item in business.ReasonsForDissatisfaction)
             {
                 Console.WriteLine(item);
