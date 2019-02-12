@@ -12,6 +12,9 @@ namespace BusinessIdSpecification
         private IEnumerable<string> reasonsForDissatisfaction;
         private List<string> reasonsForDissatisfactionList;
 
+        public BusinessIdSpecification(){
+            ReasonsForDissatisfactionList = new List<string>();
+        }
         //getters and setters
         public IEnumerable<string> ReasonsForDissatisfaction
         {
@@ -45,9 +48,7 @@ namespace BusinessIdSpecification
         public bool IsSatisfiedBy(string businessId)
         {
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
-
             //List of dissatisfactions in businessId
-            List<string> reasonsForDissatisfactionList = new List<string>();
             //checks if businessId is in correct form 
             if (BusinessIdIsInCorrectForm(businessId))
             {
@@ -62,33 +63,9 @@ namespace BusinessIdSpecification
                     reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
                     return false;
                 }
-            } 
-
-            //true if businessId does not contain hyphon
-            if (!businessId.Contains('-'))
-            {
-                reasonsForDissatisfactionList.Add("BusinessId is missing hyphon!");
-                //Checks that there are only numbers
-                if (!(int.TryParse(businessId, out int c)))
-                {
-                    reasonsForDissatisfactionList.Add("There is supposed to be only numbers separated by hyphon!");
-                }
             }
-            // Starts checking left and right side of the hyphon. Also avoids neg. numbers
-            /*else if (businessId.IndexOf('-') != 0)
-            {
-                //Executes if left side of hyphon is not in correct form
-                if (!(LeftSideOfHyphonIsInCorrectForm(businessId)))
-                {
-                    reasonsForDissatisfactionList.Add("There should be seven numbers on the left side of the hyphon and no other characters");
-                }
-                //Executes if right side of hyphon is not in correct form
-                if (!(RightSideOfHyphonIsInCorrectForm(businessId)))
-                {
-                    reasonsForDissatisfactionList.Add("There should be only one number on the rigth side of the hyphon and no other characters");
-                }
-            }*/
 
+            RightAndLeftSideOfHyphon(businessId);
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
@@ -111,7 +88,11 @@ namespace BusinessIdSpecification
                 LeftSideOfHyphonIsInCorrectForm(businessId);
                 RightSideOfHyphonIsInCorrectForm(businessId);
             }
+            else
+            {
                 ReasonsForDissatisfactionList.Add("BusinessId is missing hyphon!");
+            }
+                
         }
 
         //requires: String contains a hyphon('-')
@@ -121,7 +102,7 @@ namespace BusinessIdSpecification
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
             string regexString = @"^[0-9]+$";
-            if (!(Regex.IsMatch(businessId, regexString)))
+            if (!(Regex.IsMatch(firstPart, regexString)))
             {
                 ReasonsForDissatisfactionList.Add("Left side should contain only numbers");
             }
@@ -138,9 +119,10 @@ namespace BusinessIdSpecification
         private void RightSideOfHyphonIsInCorrectForm(string businessId)
         {
             string regexString = @"^[0-9]{1}$";
-
+            string secondPart = businessId.Substring((businessId.IndexOf('-') + 1));
+            //Console.WriteLine("secondpart is: " + secondPart);
             //Checks right side of the hyphon, if there are characters then executes
-            if (!(Regex.IsMatch(businessId, regexString)))
+            if (!(Regex.IsMatch(secondPart, regexString)))
             {
                 ReasonsForDissatisfactionList.Add("Right side of hyphon should contain only one number and no other characters");
             }
