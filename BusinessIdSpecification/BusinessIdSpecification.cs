@@ -54,7 +54,7 @@ namespace BusinessIdSpecification
                 ReasonsForDissatisfaction = Enumerable.Empty<string>();
                 return true;
             }
-
+            HasStringCorrectLength(businessId, "businessId", 9);
             RightAndLeftSideOfHyphon(businessId);
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
