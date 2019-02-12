@@ -10,6 +10,7 @@ namespace BusinessIdSpecification
     class BusinessIdSpecification : ISpecification<string>
     {
         private IEnumerable<string> reasonsForDissatisfaction;
+        private List<string> reasonsForDissatisfactionList;
 
         //getters and setters
         public IEnumerable<string> ReasonsForDissatisfaction
@@ -17,6 +18,13 @@ namespace BusinessIdSpecification
             get => reasonsForDissatisfaction;
 
             private set => reasonsForDissatisfaction = value;
+        }
+
+        private List<string> ReasonsForDissatisfactionList
+        {
+            get => reasonsForDissatisfactionList;
+
+            set => reasonsForDissatisfactionList = value;
         }
 
         public static void ThrowIfNullOrEmpty(string businessId)
@@ -55,14 +63,7 @@ namespace BusinessIdSpecification
                     return false;
                 }
             } 
-            if (businessId.Length > 9)
-            {
-                reasonsForDissatisfactionList.Add("BusinessId is too long");
-            }
-            else if (businessId.Length < 9)
-            {
-                reasonsForDissatisfactionList.Add("BusinessId is too short");
-            }
+
             //true if businessId does not contain hyphon
             if (!businessId.Contains('-'))
             {
@@ -74,7 +75,7 @@ namespace BusinessIdSpecification
                 }
             }
             // Starts checking left and right side of the hyphon. Also avoids neg. numbers
-            else if (businessId.IndexOf('-') != 0)
+            /*else if (businessId.IndexOf('-') != 0)
             {
                 //Executes if left side of hyphon is not in correct form
                 if (!(LeftSideOfHyphonIsInCorrectForm(businessId)))
@@ -86,44 +87,64 @@ namespace BusinessIdSpecification
                 {
                     reasonsForDissatisfactionList.Add("There should be only one number on the rigth side of the hyphon and no other characters");
                 }
-            }
+            }*/
 
             ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
+
+        private void HasStringCorrectLength(string testString, string stringName, int length)
+        {
+            if (testString.Length >length)
+            {
+                ReasonsForDissatisfactionList.Add(stringName + " is too long") ;
+            }
+            else if (testString.Length < length)
+            {
+                ReasonsForDissatisfactionList.Add(stringName + " is too short");
+            }
+        }
+        private void RightAndLeftSideOfHyphon(string businessId)
+        {
+            if (businessId.Contains('-'))
+            {
+                LeftSideOfHyphonIsInCorrectForm(businessId);
+                RightSideOfHyphonIsInCorrectForm(businessId);
+            }
+                ReasonsForDissatisfactionList.Add("BusinessId is missing hyphon!");
+        }
+
         //requires: String contains a hyphon('-')
         //true: left side of hyphon is in correct form
         //false: left side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
-        private bool LeftSideOfHyphonIsInCorrectForm(string businessId)
+        private void LeftSideOfHyphonIsInCorrectForm(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
-
-            //Check if left side of hyphon can be converted to int and is left side of hyphon correct length
-            if (!(int.TryParse(firstPart, out int a)) || firstPart.Length != 7)
+            string regexString = @"^[0-9]+$";
+            if (!(Regex.IsMatch(businessId, regexString)))
             {
-                return false;
+                ReasonsForDissatisfactionList.Add("Left side should contain only numbers");
             }
-            return true;
+            if(firstPart.Length != 7)
+            {
+                ReasonsForDissatisfactionList.Add("Left side should contain seven characters");
+            }
+           
         }
 
         //requires: String contains a hyphon('-')
         //true: right side of hyphon is in correct form
         //false: right side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
-        private bool RightSideOfHyphonIsInCorrectForm(string businessId)
+        private void RightSideOfHyphonIsInCorrectForm(string businessId)
         {
+            string regexString = @"^[0-9]{1}$";
+
             //Checks right side of the hyphon, if there are characters then executes
-            if (businessId.IndexOf('-') != businessId.Length - 1)
+            if (!(Regex.IsMatch(businessId, regexString)))
             {
-                string secondPart = businessId.Substring((businessId.IndexOf('-') + 1));
-                //Console.WriteLine("Right side of the hyphon is: " + secondPart);
-                //Checks if there are only ints on the right side of hyphon and that there is only one chareacter on the right side of the hyphon
-                if (!(int.TryParse(secondPart, out int b)) || secondPart.Length != 1)
-                {
-                    return false;
-                }
-                return true;
+                ReasonsForDissatisfactionList.Add("Right side of hyphon should contain only one number and no other characters");
             }
-            return false;
+
         }
         //requires: parameter is string
         //true: Business id is in correct form, NOTE: Does not check that verification number is right
