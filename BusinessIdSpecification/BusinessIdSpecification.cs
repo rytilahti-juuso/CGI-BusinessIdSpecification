@@ -16,7 +16,7 @@ namespace BusinessIdSpecification
         {
             get => reasonsForDissatisfaction;
 
-            set => reasonsForDissatisfaction = value;
+            private set => reasonsForDissatisfaction = value;
         }
 
         public static void ThrowIfNullOrEmpty(string businessId)
