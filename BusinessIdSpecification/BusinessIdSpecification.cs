@@ -9,13 +9,15 @@ namespace BusinessIdSpecification
 {
     class BusinessIdSpecification : ISpecification<string>
     {
+        //CLASS VARIABLES
         private IEnumerable<string> reasonsForDissatisfaction;
         private List<string> reasonsForDissatisfactionList;
 
+        //CONSTRUCTOR
         public BusinessIdSpecification(){
             ReasonsForDissatisfactionList = new List<string>();
         }
-        //getters and setters
+        //GETTERS AND SETTERS
         public IEnumerable<string> ReasonsForDissatisfaction
         {
             get => reasonsForDissatisfaction;
@@ -29,6 +31,9 @@ namespace BusinessIdSpecification
 
             set => reasonsForDissatisfactionList = value;
         }
+        //METHODS
+
+        //PUBLIC METHODS
 
         public static void ThrowIfNullOrEmpty(string businessId)
         {
@@ -44,7 +49,7 @@ namespace BusinessIdSpecification
         }
 
         // true: sets reasonsForDissatisFaction as empty
-        //false: sets reasons to dissatisfactions in to reasonsDissatisfaction
+        //false: sets reasons to dissatisfactions in to reasonstoDissatisfaction
         public bool IsSatisfiedBy(string businessId)
         {
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
@@ -60,20 +65,28 @@ namespace BusinessIdSpecification
             return false;
         }
 
+        //PRIVATE METHODS
+
+        //Checks if business id is fully correct
+        //requires: string as arg
+        //true: ReasonsForDissatisfaction is set to be empty
+        //false:if only verification number is incorrects, add it to ReasonForDissatisfactionList
         private bool IsBusinessIdFullyCorrect (string businessId)
         {
-            //checks if businessId is in correct form 
-            if (BusinessIdIsInCorrectForm(businessId))
+            //checks if businessId is in correct form and Checks if the verification number is right
+            if (BusinessIdIsInCorrectForm(businessId) && CalculateandCheckVerificationNumber(businessId))
             {
-                //Checks if the verification number is right
-                if (CalculateandCheckVerificationNumber(businessId))
-                {
-                    ReasonsForDissatisfaction = Enumerable.Empty<string>();
-                    return true;
-                }
+                ReasonsForDissatisfaction = Enumerable.Empty<string>();
+                return true;
+                
             }
             return false;
         }
+        //requires: 
+        //  testString, String, which length is tested,
+        //  stringName: tested string name
+        //  length: wanted length
+        //Sets: Sets reason of test failing to ReasonForDissatisfactionList
 
         private void HasStringCorrectLength(string testString, string stringName, int length)
         {
@@ -86,6 +99,10 @@ namespace BusinessIdSpecification
                 ReasonsForDissatisfactionList.Add(stringName + " is too short");
             }
         }
+
+        //Requires:String as arg, NOTE: The provided string does not require to have hyphon('-')
+        //If String has hyphon ,c alls methods LeftSideOfHyphonIsInCorrectForm(businessId), RightSideOfHyphonIsInCorrectForm(businessId);
+        //sets: if string does not have hyphon, adds to ReasonsForDissatisfactionList note about missing hyphon
         private void RightAndLeftSideOfHyphon(string businessId)
         {
             if (businessId.Contains('-'))
@@ -101,8 +118,8 @@ namespace BusinessIdSpecification
         }
 
         //requires: String contains a hyphon('-')
-        //true: left side of hyphon is in correct form
-        //false: left side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
+        //If left side of hyphon is in correct form, do nothing
+        //If left side is not in correct form, adds reasons of why it is not to ReasonsForDissatisfactionList
         private void LeftSideOfHyphonIsInCorrectForm(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
@@ -119,8 +136,8 @@ namespace BusinessIdSpecification
         }
 
         //requires: String contains a hyphon('-')
-        //true: right side of hyphon is in correct form
-        //false: right side is not in correct form, adds reasons to dissatisfactions in to reasonsDissatisfaction
+        //If right side of hyphon is in correct form, do nothing
+        //If right side is not in correct form, adds reasons to ReasonsForDissatisfactionList
         private void RightSideOfHyphonIsInCorrectForm(string businessId)
         {
             string regexString = @"^[0-9]{1}$";
