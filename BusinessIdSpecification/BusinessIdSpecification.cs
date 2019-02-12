@@ -48,7 +48,20 @@ namespace BusinessIdSpecification
         public bool IsSatisfiedBy(string businessId)
         {
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
-            //List of dissatisfactions in businessId
+            //checks if businessId is in correct form 
+            if (IsBusinessIdFullyCorrect(businessId))
+            {
+                ReasonsForDissatisfaction = Enumerable.Empty<string>();
+                return true;
+            }
+
+            RightAndLeftSideOfHyphon(businessId);
+            ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
+            return false;
+        }
+
+        private bool IsBusinessIdFullyCorrect (string businessId)
+        {
             //checks if businessId is in correct form 
             if (BusinessIdIsInCorrectForm(businessId))
             {
@@ -58,15 +71,7 @@ namespace BusinessIdSpecification
                     ReasonsForDissatisfaction = Enumerable.Empty<string>();
                     return true;
                 }
-                else
-                {
-                    reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
-                    return false;
-                }
             }
-
-            RightAndLeftSideOfHyphon(businessId);
-            ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
 
@@ -176,6 +181,7 @@ namespace BusinessIdSpecification
             }
             else
             {
+                reasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
                 return false;
             }
 

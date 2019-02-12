@@ -13,10 +13,9 @@ namespace BusinessIdSpecification
         static void Main(string[] args)
         {
             BusinessIdSpecification business = new BusinessIdSpecification();
-            string businessId = "0357502-12";
+            string businessId = "0357502-9";
             business.IsSatisfiedBy(businessId);
             //Console.WriteLine(business.IsSatisfiedBy("0357502-9"));
-            string regexString = @"^[0-9]{1}$";
             //Console.WriteLine(business.IsSatisfiedBy("0357502-9"));
             foreach (var item in business.ReasonsForDissatisfaction)
             {
