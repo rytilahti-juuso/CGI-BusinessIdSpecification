@@ -47,7 +47,7 @@ namespace BusinessIdSpecification
                                             businessId);
             }
         }
-
+        //requires: parameter is not null or empty
         // true: sets reasonsForDissatisFaction as empty
         //false: sets reasons to dissatisfactions in to reasonstoDissatisfaction
         public bool IsSatisfiedBy(string businessId)
