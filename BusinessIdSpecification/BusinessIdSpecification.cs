@@ -56,7 +56,7 @@ namespace BusinessIdSpecification
             }
             HasStringCorrectLength(businessId, "businessId", 9);
             RightAndLeftSideOfHyphon(businessId);
-            ReasonsForDissatisfaction = reasonsForDissatisfactionList.AsEnumerable();
+            ReasonsForDissatisfaction = ReasonsForDissatisfactionList.AsEnumerable();
             return false;
         }
 
