@@ -15,7 +15,8 @@ namespace BusinessIdSpecification
 
         //CONSTRUCTOR
         public BusinessIdSpecification(){
-            ReasonsForDissatisfactionList = new List<string>();
+            
+            FormatReasonForDissatisfactionEnumerableAndListCorrectly();
         }
         //GETTERS AND SETTERS
         public IEnumerable<string> ReasonsForDissatisfaction
@@ -49,15 +50,14 @@ namespace BusinessIdSpecification
         }
         //Requires: parameter is not null or empty
         // true: sets reasonsForDissatisFaction as empty
-        //false: sets reasons to dissatisfactions in to KeepDissatisfactionListAndEnumarableInSync
+        //false: sets reasons to dissatisfactions in to ReasonsForDissatisfactionList.Add
         public bool IsSatisfiedBy(string businessId)
         {
-            ClearAndEmptyDissatisfactionListAndEnumarable();
             BusinessIdSpecification.ThrowIfNullOrEmpty(businessId);
             //checks if businessId is in correct form 
             if (IsBusinessIdFullyCorrect(businessId))
             {
-                ClearAndEmptyDissatisfactionListAndEnumarable();
+                ReasonsForDissatisfactionList.Clear();
                 return true;
             }
             HasStringCorrectLength(businessId, "businessId", 9);
@@ -67,30 +67,26 @@ namespace BusinessIdSpecification
         
         //PRIVATE METHODS
 
-        //Requires: String as parameter
-        //Sets: Sets found dissatisfaction into List and after that sets list to enumarable
-        private void KeepDissatisfactionListAndEnumarableInSync(string dissatisfaction)
+        //Used: In constructor
+        //Sets: Creates a new list object to ReasonsForDissatisfactionList and sets it empty.
+        //  Lastly sets ReasonForDissatisfaction enumarable to reference the created list object 
+        private void FormatReasonForDissatisfactionEnumerableAndListCorrectly()
         {
-            ReasonsForDissatisfactionList.Add(dissatisfaction);
+            ReasonsForDissatisfactionList = new List<string>();
+            ReasonsForDissatisfaction = Enumerable.Empty<string>();
             ReasonsForDissatisfaction = ReasonsForDissatisfactionList.AsEnumerable();
         }
         
-        //Sets: Clears ReasonForDissatisfactionList and sets ReasonsForDissatisfaction to empty
-        private void ClearAndEmptyDissatisfactionListAndEnumarable()
-        {
-            ReasonsForDissatisfaction = Enumerable.Empty<string>();
-            ReasonsForDissatisfactionList.Clear();
-        }
         //Checks if business id is fully correct
         //Requires: string as arg
         //true: ReasonsForDissatisfaction is set to be empty
-        //false:if only verification number is incorrects, add its through KeepDissatisfactionListAndEnumarableInSync
+        //false:if only verification number is incorrects, add its through ReasonsForDissatisfactionList.Add
         private bool IsBusinessIdFullyCorrect (string businessId)
         {
             //checks if businessId is in correct form and Checks if the verification number is right
             if (BusinessIdIsInCorrectForm(businessId) && CalculateandCheckVerificationNumber(businessId))
             {
-                ClearAndEmptyDissatisfactionListAndEnumarable();
+                ReasonsForDissatisfactionList.Clear();
                 return true;
                 
             }
@@ -100,16 +96,16 @@ namespace BusinessIdSpecification
         //  testString, String, which length is tested,
         //  stringName: tested string name
         //  length: wanted length
-        //Sets: Adds reason of test failing through KeepDissatisfactionListAndEnumarableInSync
+        //Sets: Adds reason of test failing through ReasonsForDissatisfactionList.Add
         private void HasStringCorrectLength(string testString, string stringName, int length)
         {
             if (testString.Length >length)
             {
-                KeepDissatisfactionListAndEnumarableInSync(stringName + " is too long") ;
+                ReasonsForDissatisfactionList.Add(stringName + " is too long") ;
             }
             else if (testString.Length < length)
             {
-                KeepDissatisfactionListAndEnumarableInSync(stringName + " is too short");
+                ReasonsForDissatisfactionList.Add(stringName + " is too short");
             }
         }
 
@@ -125,32 +121,32 @@ namespace BusinessIdSpecification
             }
             else
             {
-                KeepDissatisfactionListAndEnumarableInSync("BusinessId is missing hyphon!");
+                ReasonsForDissatisfactionList.Add("BusinessId is missing hyphon!");
             }
                 
         }
 
         //Requires: String contains a hyphon('-')
         //If left side of hyphon is in correct form, do nothing
-        //If left side is not in correct form, adds reasons through KeepDissatisfactionListAndEnumarableInSync
+        //If left side is not in correct form, adds reasons through ReasonsForDissatisfactionList.Add
         private void LeftSideOfHyphonIsInCorrectForm(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
             string regexString = @"^[0-9]+$";
             if (!(Regex.IsMatch(firstPart, regexString)))
             {
-                KeepDissatisfactionListAndEnumarableInSync("Left side should contain only numbers");
+                ReasonsForDissatisfactionList.Add("Left side should contain only numbers");
             }
             if(firstPart.Length != 7)
             {
-                KeepDissatisfactionListAndEnumarableInSync("Left side should contain seven characters");
+                ReasonsForDissatisfactionList.Add("Left side should contain seven characters");
             }
            
         }
 
         //Requires: String contains a hyphon('-')
         //If right side of hyphon is in correct form, do nothing
-        //If right side is not in correct form, adds reasons through KeepDissatisfactionListAndEnumarableInSync
+        //If right side is not in correct form, adds reasons through ReasonsForDissatisfactionList.Add
         private void RightSideOfHyphonIsInCorrectForm(string businessId)
         {
             string regexString = @"^[0-9]{1}$";
@@ -159,7 +155,7 @@ namespace BusinessIdSpecification
             //Checks right side of the hyphon, if there are characters then executes
             if (!(Regex.IsMatch(secondPart, regexString)))
             {
-                KeepDissatisfactionListAndEnumarableInSync("Right side of hyphon should contain only one number and no other characters");
+                ReasonsForDissatisfactionList.Add("Right side of hyphon should contain only one number and no other characters");
             }
 
         }
@@ -183,7 +179,7 @@ namespace BusinessIdSpecification
         //uses function found here: http://tarkistusmerkit.teppovuori.fi/tarkmerk.htm#y-tunnus2
         //Requires: businessId is in correct form (ex. 1234567-8)
         //true: verification number is right
-        //false: verification number is incorrect, and sets it to dissatisfaction through KeepDissatisfactionListAndEnumarableInSync
+        //false: verification number is incorrect, and sets it to dissatisfaction through ReasonsForDissatisfactionList.Add
         private bool CalculateandCheckVerificationNumber(string businessId)
         {
             string firstPart = businessId.Substring(0, businessId.IndexOf('-'));
@@ -211,7 +207,7 @@ namespace BusinessIdSpecification
             }
             else
             {
-                KeepDissatisfactionListAndEnumarableInSync("Verification number is wrong. Please check that all inputted numbers are right");
+                ReasonsForDissatisfactionList.Add("Verification number is wrong. Please check that all inputted numbers are right");
                 return false;
             }
 
